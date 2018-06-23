@@ -1,6 +1,7 @@
 (add-to-list 'load-path "~/.emacs.d/lib")
 
-(load-library "packages")
+(add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
+
 (load-library "utils")
 (load-library "align")
 (load-library "dired-x")

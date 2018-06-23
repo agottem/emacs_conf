@@ -7,4 +7,4 @@
 
 (display-reset-window)
 
-(load-theme 'misterioso 1)
+(load-theme 'cyberpunk 1)
