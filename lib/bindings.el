@@ -1,3 +1,7 @@
+(global-set-key (kbd "C-c a") 'org-agenda)
+(global-set-key (kbd "C-c c") 'org-capture)
+
+
 (defvar bindings-c-mode-keymap (make-keymap) "bindings-c-mode keymap")
 
 (define-key bindings-c-mode-keymap (kbd "C-\\")       nil)

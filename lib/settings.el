@@ -14,14 +14,13 @@
 
 (defalias 'yes-or-no-p 'y-or-n-p)
 
-(cua-mode                                1)
-(transient-mark-mode                     1)
-(setq-default cua-auto-tabify-rectangles nil)
-(setq-default cua-keep-region-after-copy 1)
-
 (setq-default whitespace-line-column nil)
 (setq-default whitespace-style       '(face lines-tail))
 (global-whitespace-mode              1)
+
+(setq org-directory          (format "%s/%s" (getenv "dev_home") "org"))
+(setq org-agenda-files       (list (format "%s/%s" (getenv "dev_home") "org")))
+(setq org-default-notes-file (format "%s/%s/%s" (getenv "dev_home") "org" "notes.org"))
 
 (normal-erase-is-backspace-mode 1)
 (show-paren-mode                1)
@@ -67,37 +66,6 @@
 (defun settings-gmake-mode-sanitize ()
     (when(eq major-mode 'makefile-gmake-mode)
         (sanitize-explicit-utf-8-unix)))
-
-
-(defun settings-scala-mode-config ()
-    (when(eq major-mode 'scala-mode)
-        (set-buffer-file-coding-system 'utf-8-unix nil 1)
-        (bindings-dev-mode             1)
-
-        (setq tab-width             4)
-        (setq require-final-newline 'visit-save)))
-
-(defun settings-scala-mode-sanitize ()
-    (when(eq major-mode 'scala-mode)
-        (sanitize-implicit-utf-8-unix)))
-
-
-(defun settings-java-mode-config ()
-    (when(eq major-mode 'java-mode)
-        (set-buffer-file-coding-system 'utf-8-unix nil 1)
-        (bindings-dev-mode             1)
-        (styles-c-mode)
-
-        (setq c-syntactic-indentation 1)
-        (setq c-basic-offset          4)
-        (setq tab-width               4)
-        (setq indent-tabs-mode        nil)
-        (setq c-tab-always-indent     1)
-        (setq require-final-newline   'visit-save)))
-
-(defun settings-java-mode-sanitize ()
-    (when(eq major-mode 'java-mode)
-        (sanitize-implicit-utf-8-unix)))
 
 
 (defun settings-js-mode-config ()
@@ -163,6 +131,15 @@
         (sanitize-implicit-utf-8-unix)))
 
 
+(defun settings-org-mode-config ()
+    (when(eq major-mode 'org-mode)
+        (setq org-log-done 'time)))
+
+(defun settings-org-mode-sanitize ()
+    (when(eq major-mode 'org-mode)
+        (sanitize-explicit-utf-8-unix)))
+
+
 (defun settings-text-mode-config ()
     (when(eq major-mode 'text-mode)
         (set-buffer-file-coding-system 'utf-8-unix nil 1)
@@ -185,33 +162,30 @@
 
 (add-hook 'c-mode-hook              'settings-c-mode-config)
 (add-hook 'makefile-gmake-mode-hook 'settings-gmake-mode-config)
-(add-hook 'scala-mode-hook          'settings-scala-mode-config)
-(add-hook 'java-mode-hook           'settings-java-mode-config)
 (add-hook 'js-mode-hook             'settings-js-mode-config)
 (add-hook 'sgml-mode-hook           'settings-sgml-mode-config)
 (add-hook 'latex-mode-hook          'settings-latex-mode-config)
 (add-hook 'lisp-mode-hook           'settings-lisp-mode-config)
+(add-hook 'org-mode-hook            'settings-org-mode-config)
 (add-hook 'text-mode-hook           'settings-text-mode-config)
 (add-hook 'minibuffer-setup-hook    'settings-minibuffer-mode-config)
 
 (add-hook 'after-change-major-mode-hook 'settings-c-mode-sanitize)
 (add-hook 'after-change-major-mode-hook 'settings-gmake-mode-sanitize)
-(add-hook 'after-change-major-mode-hook 'settings-scala-mode-sanitize)
-(add-hook 'after-change-major-mode-hook 'settings-java-mode-sanitize)
 (add-hook 'after-change-major-mode-hook 'settings-js-mode-sanitize)
 (add-hook 'after-change-major-mode-hook 'settings-sgml-mode-sanitize)
 (add-hook 'after-change-major-mode-hook 'settings-latex-mode-sanitize)
 (add-hook 'after-change-major-mode-hook 'settings-lisp-mode-sanitize)
+(add-hook 'after-change-major-mode-hook 'settings-org-mode-sanitize)
 (add-hook 'after-change-major-mode-hook 'settings-text-mode-sanitize)
 
 (add-hook 'before-save-hook 'settings-c-mode-sanitize)
 (add-hook 'before-save-hook 'settings-gmake-mode-sanitize)
-(add-hook 'before-save-hook 'settings-scala-mode-sanitize)
-(add-hook 'before-save-hook 'settings-java-mode-sanitize)
 (add-hook 'before-save-hook 'settings-js-mode-sanitize)
 (add-hook 'before-save-hook 'settings-sgml-mode-sanitize)
 (add-hook 'before-save-hook 'settings-latex-mode-sanitize)
 (add-hook 'before-save-hook 'settings-lisp-mode-sanitize)
+(add-hook 'before-save-hook 'settings-org-mode-sanitize)
 (add-hook 'before-save-hook 'settings-text-mode-sanitize)
 
 
@@ -228,10 +202,6 @@
                                    ("Makefile$" . makefile-gmake-mode)
                                    ("makefile$" . makefile-gmake-mode)
 
-                                   ("\\.scala$" . scala-mode)
-
-                                   ("\\.java$" . java-mode)
-
                                    ("\\.js$"    . js-mode)
 
                                    ("\\.html$"   . sgml-mode)
@@ -239,13 +209,13 @@
                                    ("\\.css$"    . sgml-mode)
                                    ("\\.xml$"    . sgml-mode)
                                    ("\\.xsd$"    . sgml-mode)
-                                   ("\\.csproj$" . sgml-mode)
-                                   ("\\.sln$"    . sgml-mode)
 
                                    ("\\.tex$"   . latex-mode)
 
                                    ("\\.el$"    . lisp-mode)
                                    ("\\.emacs$" . lisp-mode)
+
+                                   ("\\.org$"   . org-mode)
 
                                    ("\\.stab$"  . text-mode)
                                    ("\\.txt$"   . text-mode))))
