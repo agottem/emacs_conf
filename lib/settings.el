@@ -7,6 +7,8 @@
 (setq-default fill-column                       100)
 (setq-default c-default-style                   "user")
 
+(setq custom-file (concat user-emacs-directory "customizations.el"))
+
 (setq default-major-mode             'text-mode)
 (setq backup-directory-alist         `((".*" . ,temporary-file-directory)))
 (setq auto-save-file-name-transforms `((".*"   ,temporary-file-directory 1)))

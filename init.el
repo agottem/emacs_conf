@@ -2,9 +2,11 @@
 
 (add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
 
-(load-library "utils")
-(load-library "align")
+(load-library "packages")
 (load-library "dired-x")
+(load-library "align")
+
+(load-library "utils")
 (load-library "find")
 (load-library "buffers")
 (load-library "editing")

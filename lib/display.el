@@ -7,4 +7,4 @@
 
 (display-reset-window)
 
-(load-theme 'cyberpunk 1)
+(load-theme 'soft-charcoal 1)
