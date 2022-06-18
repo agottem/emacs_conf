@@ -24,7 +24,6 @@
 (setq org-agenda-files       (list (format "%s/%s" (getenv "dev_home") "org")))
 (setq org-default-notes-file (format "%s/%s/%s" (getenv "dev_home") "org" "notes.org"))
 
-(normal-erase-is-backspace-mode 1)
 (show-paren-mode                1)
 (menu-bar-mode                  0)
 (tool-bar-mode                  0)
