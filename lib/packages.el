@@ -12,6 +12,14 @@
 (use-package ess
     :ensure t)
 
+(use-package elpy
+    :ensure t
+    :init
+    (elpy-enable))
+
+(use-package csv-mode
+    :ensure t)
+
 (use-package company
     :ensure t
     :config

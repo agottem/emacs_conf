@@ -203,6 +203,12 @@
                                    ("Makefile$" . makefile-gmake-mode)
                                    ("makefile$" . makefile-gmake-mode)
 
+                                   ("\\.py$"    . python-mode)
+
+                                   ("\\.patch$" . diff-mode)
+
+                                   ("\\.csv$"   . csv-mode)
+
                                    ("\\.js$"    . js-mode)
 
                                    ("\\.html$"   . sgml-mode)
