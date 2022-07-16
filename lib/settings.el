@@ -203,6 +203,8 @@
                                    ("Makefile$" . makefile-gmake-mode)
                                    ("makefile$" . makefile-gmake-mode)
 
+                                   ("\\.R$"     . R-mode)
+
                                    ("\\.py$"    . python-mode)
 
                                    ("\\.patch$" . diff-mode)
