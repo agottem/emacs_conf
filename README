@@ -1,0 +1,13 @@
+Requires Emacs v30 or better
+
+Debian 12:
+     Update sources.list to include backports:
+         deb http://deb.debian.org/debian bookworm-backports main
+
+         apt update
+         apt install -t bookworm-backports emacs
+
+Additional dependencies:
+     apt install python3-pylsp
+     apt install clangd
+     apt install bear

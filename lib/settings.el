@@ -7,187 +7,200 @@
 (setq-default fill-column                       100)
 (setq-default c-default-style                   "user")
 
-(setq custom-file (concat user-emacs-directory "customizations.el"))
+(defvar settings-backup-dir   (file-name-concat user-emacs-tmp-directory "backups/"))
+(defvar settings-autosave-dir (file-name-concat user-emacs-tmp-directory "autosaves/"))
+(defvar settings-locks-dir    (file-name-concat user-emacs-tmp-directory "locks/"))
 
-(setq default-major-mode             'text-mode)
-(setq backup-directory-alist         `((".*" . ,temporary-file-directory)))
-(setq auto-save-file-name-transforms `((".*"   ,temporary-file-directory 1)))
-(setq auto-save-list-file-prefix     temporary-file-directory)
+(make-directory settings-backup-dir   t)
+(make-directory settings-autosave-dir t)
+(make-directory settings-locks-dir    t)
+
+(setq backup-directory-alist         `((".*" . ,settings-backup-dir)))
+(setq auto-save-file-name-transforms `((".*" ,settings-autosave-dir t)))
+(setq auto-save-list-file-prefix     settings-autosave-dir)
+(setq lock-file-name-transforms      `((".*" ,settings-locks-dir t)))
+(setq project-list-file              (file-name-concat user-emacs-tmp-directory "projects.el"))
+(setq custom-file                    (file-name-concat user-emacs-tmp-directory "customizations.el"))
+(setq tramp-persistency-file-name    (file-name-concat user-emacs-tmp-directory "tramp"))
+(setq transient-history-file         (file-name-concat user-emacs-tmp-directory "tramp/history.el"))
 
 (defalias 'yes-or-no-p 'y-or-n-p)
 
+(setq initial-major-mode 'text-mode)
+
 (setq-default whitespace-line-column nil)
-(setq-default whitespace-style       '(face lines-tail))
+(setq-default whitespace-style       '(face trailing tabs empty lines-tail))
 (global-whitespace-mode              1)
 
 (setq org-directory          (format "%s/%s" (getenv "dev_home") "org"))
 (setq org-agenda-files       (list (format "%s/%s" (getenv "dev_home") "org")))
 (setq org-default-notes-file (format "%s/%s/%s" (getenv "dev_home") "org" "notes.org"))
 
-(show-paren-mode                1)
-(menu-bar-mode                  0)
-(tool-bar-mode                  0)
-(electric-pair-mode             1)
-(electric-indent-mode           1)
+(setq python-shell-interpreter      "python3")
+(setq python-shell-interpreter-args "-i")
+
+(setq eldoc-display-functions '(eldoc-display-in-buffer))
+
+(show-paren-mode      1)
+(menu-bar-mode        0)
+(tool-bar-mode        0)
+(electric-pair-mode   1)
+(electric-indent-mode 1)
+(which-key-mode       1)
+
+(global-highlight-parentheses-mode)
+(global-tree-sitter-mode)
+(global-diff-hl-mode)
+(global-corfu-mode)
 
 (put 'downcase-region 'disabled nil)
+(put 'upcase-region   'disabled nil)
 
 
 (defun settings-c-mode-config ()
-    (when(eq major-mode 'c-mode)
-        (set-buffer-file-coding-system 'utf-8-unix nil 1)
-        (bindings-c-mode               1)
-        (styles-c-mode)
+    (set-buffer-file-coding-system 'utf-8-unix nil 1)
+    (styles-c-mode)
 
-        (setq c-syntactic-indentation 1)
-        (setq c-basic-offset          4)
-        (setq tab-width               4)
-        (setq indent-tabs-mode        nil)
-        (setq c-tab-always-indent     1)
-        (setq require-final-newline   'visit-save)))
+    (setq c-syntactic-indentation 1)
+    (setq c-basic-offset          4)
+    (setq tab-width               4)
+    (setq indent-tabs-mode        nil)
+    (setq c-tab-always-indent     1)
+    (setq require-final-newline   'visit-save)
 
-(defun settings-c-mode-sanitize ()
-    (when(eq major-mode 'c-mode)
-        (sanitize-implicit-utf-8-unix)))
+    (when-let* ((project (project-current))
+                (root    (project-root project)))
+        (if (or (file-exists-p (expand-file-name "compile_commands.json" root))
+                (file-exists-p (expand-file-name "build/compile_commands.json" root)))
+            (eglot-ensure)
+            (message "Generate compile_commands.json or build/compile_commands.json to activate eglot"))
+        )
 
+    (add-hook 'before-save-hook 'sanitize-standardize-source-file nil 'local))
+
+(defun settings-python-mode-config ()
+    (set-buffer-file-coding-system 'utf-8-unix nil 1)
+    (eglot-ensure)
+
+    (setq tab-width               4)
+    (setq indent-tabs-mode        nil)
+    (setq require-final-newline   'visit-save)
+
+    (add-hook 'before-save-hook 'sanitize-standardize-source-file nil 'local))
+
+(defun settings-r-mode-config ()
+    (set-buffer-file-coding-system 'utf-8-unix nil 1)
+    (ess-r-mode)
+
+    (setq tab-width               4)
+    (setq indent-tabs-mode        nil)
+    (setq require-final-newline   'visit-save)
+
+    (add-hook 'before-save-hook 'sanitize-standardize-source-file nil 'local))
 
 (defun settings-gmake-mode-config ()
-    (when(eq major-mode 'makefile-gmake-mode)
-        (set-buffer-file-coding-system 'utf-8-unix nil 1)
-        (bindings-dev-mode             1)
+    (set-buffer-file-coding-system 'utf-8-unix nil 1)
 
-        (set
-            (make-local-variable 'whitespace-style)
-            '(tabs spaces space-mark tab-mark face lines-tail))
-        (whitespace-mode 1)
+    (setq tab-width             4)
+    (setq require-final-newline 'visit-save)
 
-        (setq tab-width             4)
-        (setq require-final-newline 'visit-save)))
-
-(defun settings-gmake-mode-sanitize ()
-    (when(eq major-mode 'makefile-gmake-mode)
-        (sanitize-explicit-utf-8-unix)))
-
+    (add-hook 'before-save-hook 'sanitize-standardize-makefile nil 'local))
 
 (defun settings-js-mode-config ()
-    (when(eq major-mode 'js-mode)
-        (set-buffer-file-coding-system 'utf-8-unix nil 1)
-        (bindings-dev-mode             1)
-        (styles-c-mode)
+    (set-buffer-file-coding-system 'utf-8-unix nil 1)
+    (styles-c-mode)
 
-        (setq c-syntactic-indentation 1)
-        (setq c-basic-offset          4)
-        (setq tab-width               4)
-        (setq indent-tabs-mode        nil)
-        (setq c-tab-always-indent     1)
-        (setq require-final-newline   'visit-save)))
+    (setq c-syntactic-indentation 1)
+    (setq c-basic-offset          4)
+    (setq tab-width               4)
+    (setq indent-tabs-mode        nil)
+    (setq c-tab-always-indent     1)
+    (setq require-final-newline   'visit-save)
 
-(defun settings-js-mode-sanitize ()
-    (when(eq major-mode 'js-mode)
-        (sanitize-implicit-utf-8-unix)))
+    (add-hook 'before-save-hook 'sanitize-standardize-source-file nil 'local))
 
+(defun settings-html-mode-config ()
+    (set-buffer-file-coding-system 'utf-8-unix nil 1)
 
-(defun settings-sgml-mode-config ()
-    (when(eq major-mode 'sgml-mode)
-        (set-buffer-file-coding-system 'utf-8-unix nil 1)
-        (bindings-dev-mode             1)
+    (setq tab-width             4)
+    (setq indent-tabs-mode      nil)
+    (setq require-final-newline 'visit-save)
 
-        (setq sgml-basic-offset     4)
-        (setq tab-width             4)
-        (setq indent-tabs-mode      nil)
-        (setq require-final-newline 'visit-save)))
+    (add-hook 'before-save-hook 'sanitize-standardize-source-file nil 'local))
 
-(defun settings-sgml-mode-sanitize ()
-    (when(eq major-mode 'sgml-mode)
-        (sanitize-implicit-utf-8-unix)))
+(defun settings-css-mode-config ()
+    (set-buffer-file-coding-system 'utf-8-unix nil 1)
 
+    (setq tab-width             4)
+    (setq indent-tabs-mode      nil)
+    (setq require-final-newline 'visit-save)
+
+    (add-hook 'before-save-hook 'sanitize-standardize-source-file nil 'local))
+
+(defun settings-xml-mode-config ()
+    (set-buffer-file-coding-system 'utf-8-unix nil 1)
+
+    (setq tab-width             4)
+    (setq indent-tabs-mode      nil)
+    (setq require-final-newline 'visit-save)
+
+    (add-hook 'before-save-hook 'sanitize-standardize-source-file nil 'local))
 
 (defun settings-latex-mode-config ()
-    (when(eq major-mode 'latex-mode)
-        (set-buffer-file-coding-system 'utf-8-unix nil 1)
-        (bindings-dev-mode             1)
+    (set-buffer-file-coding-system 'utf-8-unix nil 1)
 
-        (setq tex-indent-basic      4)
-        (setq tab-width             4)
-        (setq indent-tabs-mode      nil)
-        (setq require-final-newline 'visit-save)))
+    (setq tex-indent-basic      4)
+    (setq tab-width             4)
+    (setq indent-tabs-mode      nil)
+    (setq require-final-newline 'visit-save)
 
-(defun settings-latex-mode-sanitize ()
-    (when(eq major-mode 'latex-mode)
-        (sanitize-implicit-utf-8-unix)))
-
+    (add-hook 'before-save-hook 'sanitize-standardize-source-file nil 'local))
 
 (defun settings-lisp-mode-config ()
-    (when(eq major-mode 'lisp-mode)
-        (set-buffer-file-coding-system 'utf-8-unix nil 1)
-        (bindings-dev-mode             1)
+    (set-buffer-file-coding-system 'utf-8-unix nil 1)
 
-        (setq lisp-indent-offset    4)
-        (setq tab-width             4)
-        (setq indent-tabs-mode      nil)
-        (setq require-final-newline 'visit-save)))
+    (setq lisp-indent-offset    4)
+    (setq tab-width             4)
+    (setq indent-tabs-mode      nil)
+    (setq require-final-newline 'visit-save)
 
-(defun settings-lisp-mode-sanitize ()
-    (when(eq major-mode 'lisp-mode)
-        (sanitize-implicit-utf-8-unix)))
-
+    (add-hook 'before-save-hook 'sanitize-standardize-source-file nil 'local))
 
 (defun settings-org-mode-config ()
-    (when(eq major-mode 'org-mode)
-        (setq org-log-done 'time)))
+    (setq org-log-done 'time)
 
-(defun settings-org-mode-sanitize ()
-    (when(eq major-mode 'org-mode)
-        (sanitize-explicit-utf-8-unix)))
+    (add-hook 'before-save-hook 'sanitize-standardize-source-file nil 'local))
 
+(defun settings-markdown-mode-config ()
+    (gptel-mode)
+
+    (setq tab-width        4)
+    (setq indent-tabs-mode nil)
+
+    (add-hook 'before-save-hook 'sanitize-standardize-source-file nil 'local))
 
 (defun settings-text-mode-config ()
-    (when(eq major-mode 'text-mode)
-        (set-buffer-file-coding-system 'utf-8-unix nil 1)
-        (bindings-basic-mode           1)
+    (set-buffer-file-coding-system 'utf-8-unix nil 1)
 
-        (set
-            (make-local-variable 'whitespace-style)
-            '(tabs spaces space-mark tab-mark face lines-tail))
-        (whitespace-mode 1)
-
-        (setq tab-width             4)))
-
-(defun settings-text-mode-sanitize ()
-    (when(eq major-mode 'text-mode)))
-
-
-(defun settings-minibuffer-mode-config ()
-        (bindings-minibuffer-mode 1))
+    (setq indent-tabs-mode t)
+    (setq tab-width        4))
 
 
 (add-hook 'c-mode-hook              'settings-c-mode-config)
+(add-hook 'python-mode-hook         'settings-python-mode-config)
+(add-hook 'r-mode-hook              'settings-r-mode-config)
 (add-hook 'makefile-gmake-mode-hook 'settings-gmake-mode-config)
 (add-hook 'js-mode-hook             'settings-js-mode-config)
-(add-hook 'sgml-mode-hook           'settings-sgml-mode-config)
+(add-hook 'html-mode-hook           'settings-html-mode-config)
+(add-hook 'css-mode-hook            'settings-css-mode-config)
+(add-hook 'xml-mode-hook            'settings-xml-mode-config)
 (add-hook 'latex-mode-hook          'settings-latex-mode-config)
 (add-hook 'lisp-mode-hook           'settings-lisp-mode-config)
 (add-hook 'org-mode-hook            'settings-org-mode-config)
+(add-hook 'markdown-mode-hook       'settings-markdown-mode-config)
 (add-hook 'text-mode-hook           'settings-text-mode-config)
-(add-hook 'minibuffer-setup-hook    'settings-minibuffer-mode-config)
 
-(add-hook 'after-change-major-mode-hook 'settings-c-mode-sanitize)
-(add-hook 'after-change-major-mode-hook 'settings-gmake-mode-sanitize)
-(add-hook 'after-change-major-mode-hook 'settings-js-mode-sanitize)
-(add-hook 'after-change-major-mode-hook 'settings-sgml-mode-sanitize)
-(add-hook 'after-change-major-mode-hook 'settings-latex-mode-sanitize)
-(add-hook 'after-change-major-mode-hook 'settings-lisp-mode-sanitize)
-(add-hook 'after-change-major-mode-hook 'settings-org-mode-sanitize)
-(add-hook 'after-change-major-mode-hook 'settings-text-mode-sanitize)
-
-(add-hook 'before-save-hook 'settings-c-mode-sanitize)
-(add-hook 'before-save-hook 'settings-gmake-mode-sanitize)
-(add-hook 'before-save-hook 'settings-js-mode-sanitize)
-(add-hook 'before-save-hook 'settings-sgml-mode-sanitize)
-(add-hook 'before-save-hook 'settings-latex-mode-sanitize)
-(add-hook 'before-save-hook 'settings-lisp-mode-sanitize)
-(add-hook 'before-save-hook 'settings-org-mode-sanitize)
-(add-hook 'before-save-hook 'settings-text-mode-sanitize)
+(add-hook 'tree-sitter-after-on-hook 'tree-sitter-hl-mode)
 
 
 (setq auto-mode-alist (append '(
@@ -197,15 +210,14 @@
                                    ("\\.cxx$"   . c-mode)
                                    ("\\.h$"     . c-mode)
                                    ("\\.hpp$"   . c-mode)
-                                   ("\\.cs$"    . c-mode)
+
+                                   ("\\.py$"    . python-mode)
 
                                    ("\\.mk$"    . makefile-gmake-mode)
                                    ("Makefile$" . makefile-gmake-mode)
                                    ("makefile$" . makefile-gmake-mode)
 
-                                   ("\\.R$"     . R-mode)
-
-                                   ("\\.py$"    . python-mode)
+                                   ("\\.R$"     . r-mode)
 
                                    ("\\.patch$" . diff-mode)
 
@@ -213,11 +225,10 @@
 
                                    ("\\.js$"    . js-mode)
 
-                                   ("\\.html$"   . sgml-mode)
-                                   ("\\.htm$"    . sgml-mode)
-                                   ("\\.css$"    . sgml-mode)
-                                   ("\\.xml$"    . sgml-mode)
-                                   ("\\.xsd$"    . sgml-mode)
+                                   ("\\.html$"  . html-mode)
+                                   ("\\.htm$"   . html-mode)
+                                   ("\\.css$"   . css-mode)
+                                   ("\\.xml$"   . xml-mode)
 
                                    ("\\.tex$"   . latex-mode)
 
@@ -225,6 +236,9 @@
                                    ("\\.emacs$" . lisp-mode)
 
                                    ("\\.org$"   . org-mode)
+
+                                   ("\\.gpt$"   . markdown-mode)
+                                   ("\\.md$"    . markdown-mode)
 
                                    ("\\.stab$"  . text-mode)
                                    ("\\.txt$"   . text-mode))))

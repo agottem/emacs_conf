@@ -1,39 +1,54 @@
+(setq package-user-dir (concat user-emacs-tmp-directory "packages"))
 (require 'package)
 
-(add-to-list 'package-archives
-    '("mepla" . "https://melpa.org/packages/"))
-
+(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 (package-initialize)
 
 (unless (package-installed-p 'use-package)
     (package-refresh-contents)
     (package-install 'use-package))
 
-(use-package ess
-    :ensure t)
+(use-package ace-window            :ensure t :defer t)
+(use-package highlight-parentheses :ensure t :defer t)
+(use-package tree-sitter           :ensure t :defer t)
+(use-package tree-sitter-langs     :ensure t :defer t)
+(use-package diff-hl               :ensure t :defer t)
+(use-package magit                 :ensure t :defer t)
+(use-package which-key             :ensure t :defer t)
+(use-package markdown-mode         :ensure t :defer t)
+(use-package ess                   :ensure t :defer t)
+(use-package csv-mode              :ensure t :defer t)
 
-(use-package elpy
-    :ensure t
-    :init
-    (elpy-enable))
-
-(setq elpy-rpc-python-command "python3")
-(setq python-shell-interpreter "python3")
-(setq python-shell-interpreter-args "-i")
-
-(use-package csv-mode
-    :ensure t)
-
-(use-package company
+(use-package minions
     :ensure t
     :config
-    (setq company-idle-delay 0)
-    (setq company-minimum-prefix-length 2)
-    (global-company-mode t))
+    (minions-mode 1))
 
-(use-package highlight-parentheses
+(use-package gptel
     :ensure t
+    :defer t
     :config
-    (progn
-        (highlight-parentheses-mode)
-        (global-highlight-parentheses-mode)))
+    (setq gptel-model   'claude-sonnet-4-5-20250929)
+    (setq gptel-backend (gptel-make-anthropic "Claude" :stream t :key (getenv "ANTHROPIC_API_KEY"))))
+
+(use-package corfu
+    :ensure t
+    :defer t
+    :custom
+    (corfu-auto t)
+    (corfu-cycle t)
+    (corfu-auto-delay 0.2)
+    (corfu-auto-prefix 2))
+
+(use-package eglot
+    :ensure t
+    :defer t
+    :config
+    (setq eglot-autoshutdown t)
+    (setq eglot-sync-connect nil)
+    (setq eglot-ignored-server-capabilities '(:documentFormattingProvider
+                                              :documentRangeFormattingProvider
+                                              :documentOnTypeFormattingProvider
+                                              :documentHighlightProvider
+                                              :semanticTokensProvider
+                                              :inlayHintProvider)))
