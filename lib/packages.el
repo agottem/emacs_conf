@@ -18,6 +18,7 @@
 (use-package markdown-mode         :ensure t :defer t)
 (use-package ess                   :ensure t :defer t)
 (use-package csv-mode              :ensure t :defer t)
+(use-package pyvenv                :ensure t :defer t)
 
 (use-package minions
     :ensure t
@@ -28,7 +29,7 @@
     :ensure t
     :defer t
     :config
-    (setq gptel-model   'claude-sonnet-4-5-20250929)
+    (setq gptel-model   'claude-opus-4-5-20251101)
     (setq gptel-backend (gptel-make-anthropic "Claude" :stream t :key (getenv "ANTHROPIC_API_KEY"))))
 
 (use-package corfu

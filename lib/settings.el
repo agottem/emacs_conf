@@ -168,6 +168,7 @@
 
 (defun settings-org-mode-config ()
     (setq org-log-done 'time)
+    (setq tab-width    8)
 
     (add-hook 'before-save-hook 'sanitize-standardize-source-file nil 'local))
 
