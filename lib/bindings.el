@@ -2,6 +2,8 @@
 (global-set-key (kbd "C-c c") 'org-capture)
 (global-set-key (kbd "C-c m") 'gptel)
 (global-set-key (kbd "C-c o") 'ace-window)
+(global-set-key (kbd "M-n")   'scroll-up-line)
+(global-set-key (kbd "M-p")   'scroll-down-line)
 
 
 (defvar bindings-dev-mode-keymap (make-keymap) "bindings-dev-mode keymap")
