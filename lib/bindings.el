@@ -32,8 +32,9 @@
 
 (add-hook 'c-mode-hook              'bindings-dev-mode)
 (add-hook 'python-mode-hook         'bindings-dev-mode)
-(add-hook 'r-mode-hook              'bindings-dev-mode)
 (add-hook 'makefile-gmake-mode-hook 'bindings-dev-mode)
+(add-hook 'sh-mode-hook             'bindings-dev-mode)
+(add-hook 'r-mode-hook              'bindings-dev-mode)
 (add-hook 'js-mode-hook             'bindings-dev-mode)
 (add-hook 'html-mode-hook           'bindings-dev-mode)
 (add-hook 'css-mode-hook            'bindings-dev-mode)

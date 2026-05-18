@@ -88,6 +88,23 @@
 
     (add-hook 'before-save-hook 'sanitize-standardize-source-file nil 'local))
 
+(defun settings-gmake-mode-config ()
+    (set-buffer-file-coding-system 'utf-8-unix nil 1)
+
+    (setq tab-width             4)
+    (setq require-final-newline 'visit-save)
+
+    (add-hook 'before-save-hook 'sanitize-standardize-makefile nil 'local))
+
+(defun settings-sh-mode-config ()
+    (set-buffer-file-coding-system 'utf-8-unix nil 1)
+
+    (setq tab-width               4)
+    (setq indent-tabs-mode        nil)
+    (setq require-final-newline   'visit-save)
+
+    (add-hook 'before-save-hook 'sanitize-standardize-source-file nil 'local))
+
 (defun settings-r-mode-config ()
     (set-buffer-file-coding-system 'utf-8-unix nil 1)
     (ess-r-mode)
@@ -97,14 +114,6 @@
     (setq require-final-newline   'visit-save)
 
     (add-hook 'before-save-hook 'sanitize-standardize-source-file nil 'local))
-
-(defun settings-gmake-mode-config ()
-    (set-buffer-file-coding-system 'utf-8-unix nil 1)
-
-    (setq tab-width             4)
-    (setq require-final-newline 'visit-save)
-
-    (add-hook 'before-save-hook 'sanitize-standardize-makefile nil 'local))
 
 (defun settings-js-mode-config ()
     (set-buffer-file-coding-system 'utf-8-unix nil 1)
@@ -156,7 +165,7 @@
 
     (add-hook 'before-save-hook 'sanitize-standardize-source-file nil 'local))
 
-(defun settings-lisp-mode-config ()
+(defun settings-emacs-lisp-mode-config ()
     (set-buffer-file-coding-system 'utf-8-unix nil 1)
 
     (setq lisp-indent-offset    4)
@@ -173,7 +182,8 @@
     (add-hook 'before-save-hook 'sanitize-standardize-source-file nil 'local))
 
 (defun settings-markdown-mode-config ()
-    (gptel-mode)
+    (when (and buffer-file-name (string-match-p "\\.gpt\\'" buffer-file-name))
+        (gptel-mode 1))
 
     (setq tab-width        4)
     (setq indent-tabs-mode nil)
@@ -189,14 +199,15 @@
 
 (add-hook 'c-mode-hook              'settings-c-mode-config)
 (add-hook 'python-mode-hook         'settings-python-mode-config)
-(add-hook 'r-mode-hook              'settings-r-mode-config)
 (add-hook 'makefile-gmake-mode-hook 'settings-gmake-mode-config)
+(add-hook 'sh-mode-hook             'settings-sh-mode-config)
+(add-hook 'r-mode-hook              'settings-r-mode-config)
 (add-hook 'js-mode-hook             'settings-js-mode-config)
 (add-hook 'html-mode-hook           'settings-html-mode-config)
 (add-hook 'css-mode-hook            'settings-css-mode-config)
 (add-hook 'xml-mode-hook            'settings-xml-mode-config)
 (add-hook 'latex-mode-hook          'settings-latex-mode-config)
-(add-hook 'lisp-mode-hook           'settings-lisp-mode-config)
+(add-hook 'emacs-lisp-mode-hook     'settings-emacs-lisp-mode-config)
 (add-hook 'org-mode-hook            'settings-org-mode-config)
 (add-hook 'markdown-mode-hook       'settings-markdown-mode-config)
 (add-hook 'text-mode-hook           'settings-text-mode-config)
@@ -218,6 +229,8 @@
                                    ("Makefile$" . makefile-gmake-mode)
                                    ("makefile$" . makefile-gmake-mode)
 
+                                   ("\\.sh$"    . sh-mode)
+
                                    ("\\.R$"     . r-mode)
 
                                    ("\\.patch$" . diff-mode)
@@ -233,8 +246,8 @@
 
                                    ("\\.tex$"   . latex-mode)
 
-                                   ("\\.el$"    . lisp-mode)
-                                   ("\\.emacs$" . lisp-mode)
+                                   ("\\.el$"    . emacs-lisp-mode)
+                                   ("\\.emacs$" . emacs-lisp-mode)
 
                                    ("\\.org$"   . org-mode)
 

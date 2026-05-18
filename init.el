@@ -13,3 +13,4 @@
 (load-library "display")
 (load-library "lsp")
 (load-library "projects")
+(load-library "agent")
