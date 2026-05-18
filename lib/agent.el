@@ -14,7 +14,7 @@
 
 (defun agent-make-command-prefix (buffer)
     (or (project-current) (user-error "Must be in a project to spawn a rig agent-shell"))
-    (list "rig-agentsh"
+    (list "rig-agent-shell.sh"
         (concat "--name=" (agent-make-name))
         (concat "--repo=" (expand-file-name (project-root (project-current))))
         (concat "--artifact-root=" agent-artifact-root)))
