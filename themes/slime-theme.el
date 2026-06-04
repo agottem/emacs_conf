@@ -93,7 +93,7 @@
  '(font-lock-builtin-face ((t (:foreground "#C7AF3F"  ))))
  '(font-lock-variable-name-face ((t (:foreground "#8AB8A2"  ))))
  '(font-lock-keyword-face ((t (:foreground "#9FB3C2"  ))))
- '(font-lock-type-face ((t (:foreground "#C7AF3F"  :underline t))))
+ '(font-lock-type-face ((t (:foreground "#C7AF3F"  :underline nil))))
  '(font-lock-function-name-face ((t (:foreground "#C7AF3F"  ))))
  '(js3-function-param-face ((t (:foreground "#C7AF3F"  :italic t))))
  '(js2-function-param ((t (:foreground "#C7AF3F"  :italic t))))
