@@ -22,12 +22,9 @@
 (define-key bindings-dev-mode-keymap (kbd "M-<down>")   'scroll-up-command)
 (define-key bindings-dev-mode-keymap (kbd "M-S-<down>") 'scroll-up-line)
 
-(define-minor-mode
-    bindings-dev-mode
+(define-minor-mode bindings-dev-mode
     "dev-mode bindings"
-    nil
-    nil
-    bindings-dev-mode-keymap)
+    :keymap bindings-dev-mode-keymap)
 
 
 (add-hook 'c-mode-hook              'bindings-dev-mode)
