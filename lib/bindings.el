@@ -9,6 +9,8 @@
 (defvar bindings-dev-mode-keymap (make-keymap) "bindings-dev-mode keymap")
 
 (define-key bindings-dev-mode-keymap (kbd "C-c l")      'align-current)
+(define-key bindings-dev-mode-keymap (kbd "C-c f")      'clang-format-region)
+(define-key bindings-dev-mode-keymap (kbd "C-c C-f")    'clang-format-buffer)
 (define-key bindings-dev-mode-keymap (kbd "<C-tab>")    'editing-indent)
 (define-key bindings-dev-mode-keymap (kbd "<backtab>")  'editing-unindent)
 (define-key bindings-dev-mode-keymap (kbd "RET")        'newline-and-indent)

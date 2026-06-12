@@ -97,7 +97,6 @@
  '(font-lock-function-name-face ((t (:foreground "#C7AF3F"  ))))
  '(js3-function-param-face ((t (:foreground "#C7AF3F"  :italic t))))
  '(js2-function-param ((t (:foreground "#C7AF3F"  :italic t))))
- '(font-lock-warning-face ((t (:foreground "#F8F8F0" :background "#8FBE00" ))))
  '(diff-removed ((t (:foreground "#00A8C6"  ))))
  '(diff-added ((t (:foreground "#A6E22E"  ))))
  '(diff-changed ((t (:foreground "#E6DB74"  ))))

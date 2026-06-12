@@ -22,6 +22,7 @@
 (use-package highlight-parentheses :ensure t :defer t)
 (use-package tree-sitter           :ensure t :defer t)
 (use-package tree-sitter-langs     :ensure t :defer t)
+(use-package clang-format          :ensure t :defer t)
 (use-package diff-hl               :ensure t :defer t)
 (use-package magit                 :ensure t :defer t)
 (use-package which-key             :ensure t :defer t)
