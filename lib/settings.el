@@ -213,6 +213,7 @@
 (add-hook 'text-mode-hook           'settings-text-mode-config)
 
 (add-hook 'tree-sitter-after-on-hook 'tree-sitter-hl-mode)
+(add-hook 'shell-mode-hook           'compilation-shell-minor-mode)
 
 
 (setq auto-mode-alist (append '(

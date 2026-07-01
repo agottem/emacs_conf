@@ -1,16 +1,3 @@
-(defun styles-indent-lineup-under-block (langelem)
-    (save-excursion
-        (beginning-of-line)
-        (backward-up-list)
-        (vector (+ tab-width (current-column)))))
-
-(defun styles-lineup-under-block (langelem)
-    (save-excursion
-        (beginning-of-line)
-        (backward-up-list)
-        (vector (current-column))))
-
-
 (defun styles-c-mode ()
     (c-set-offset 'topmost-intro      0)
     (c-set-offset 'topmost-intro-cont 0)
@@ -44,10 +31,10 @@
     (c-set-offset 'else-clause      0)
     (c-set-offset 'catch-clause     0)
 
-    (c-set-offset 'brace-list-open  'styles-lineup-under-block)
-    (c-set-offset 'brace-list-close 'styles-lineup-under-block)
-    (c-set-offset 'brace-list-intro 'styles-indent-lineup-under-block)
-    (c-set-offset 'brace-list-entry 'styles-indent-lineup-under-block)
+    (c-set-offset 'brace-list-open  0)
+    (c-set-offset 'brace-list-close 0)
+    (c-set-offset 'brace-list-intro '+)
+    (c-set-offset 'brace-list-entry 0)
 
     (c-set-offset 'comment-intro 0)
     (c-set-offset 'c             1)
