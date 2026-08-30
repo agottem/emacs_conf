@@ -1,7 +1,10 @@
+;; -*- lexical-binding: t; -*-
+
 (global-set-key (kbd "C-c a") 'org-agenda)
 (global-set-key (kbd "C-c c") 'org-capture)
 (global-set-key (kbd "C-c m") 'gptel)
 (global-set-key (kbd "C-c o") 'ace-window)
+(global-set-key (kbd "C-c r") 'project-query-replace-regexp)
 (global-set-key (kbd "M-n")   'scroll-up-line)
 (global-set-key (kbd "M-p")   'scroll-down-line)
 
@@ -29,14 +32,14 @@
     :keymap bindings-dev-mode-keymap)
 
 
-(add-hook 'c-mode-hook              'bindings-dev-mode)
-(add-hook 'python-mode-hook         'bindings-dev-mode)
+(add-hook 'c-ts-mode-hook           'bindings-dev-mode)
+(add-hook 'python-ts-mode-hook      'bindings-dev-mode)
 (add-hook 'makefile-gmake-mode-hook 'bindings-dev-mode)
 (add-hook 'sh-mode-hook             'bindings-dev-mode)
 (add-hook 'r-mode-hook              'bindings-dev-mode)
-(add-hook 'js-mode-hook             'bindings-dev-mode)
-(add-hook 'html-mode-hook           'bindings-dev-mode)
-(add-hook 'css-mode-hook            'bindings-dev-mode)
+(add-hook 'js-ts-mode-hook          'bindings-dev-mode)
+(add-hook 'html-ts-mode-hook        'bindings-dev-mode)
+(add-hook 'css-ts-mode-hook         'bindings-dev-mode)
 (add-hook 'xml-mode-hook            'bindings-dev-mode)
 (add-hook 'latex-mode-hook          'bindings-dev-mode)
 (add-hook 'lisp-mode-hook           'bindings-dev-mode)

@@ -1,1 +1,3 @@
-(load-theme 'slime 1)
+;; -*- lexical-binding: t; -*-
+
+(setq doom-theme 'doom-city-lights)

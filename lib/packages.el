@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t; -*-
+
 (setq package-user-dir (concat user-emacs-tmp-directory "packages"))
 (setq package-install-upgrade-built-in t)
 (require 'package)
@@ -20,8 +22,6 @@
 
 (use-package ace-window            :ensure t :defer t)
 (use-package highlight-parentheses :ensure t :defer t)
-(use-package tree-sitter           :ensure t :defer t)
-(use-package tree-sitter-langs     :ensure t :defer t)
 (use-package clang-format          :ensure t :defer t)
 (use-package diff-hl               :ensure t :defer t)
 (use-package magit                 :ensure t :defer t)
@@ -30,6 +30,13 @@
 (use-package ess                   :ensure t :defer t)
 (use-package csv-mode              :ensure t :defer t)
 (use-package pyvenv                :ensure t :defer t)
+
+(use-package treesit
+    :custom
+    (treesit-enabled-modes t)
+    (treesit-auto-install-grammar 'ask)
+    :config
+    (add-to-list 'treesit-extra-load-path (file-name-concat user-emacs-tmp-directory "tree-sitter")))
 
 (use-package minions
     :ensure t
@@ -81,3 +88,13 @@
                                               :documentHighlightProvider
                                               :semanticTokensProvider
                                               :inlayHintProvider)))
+
+(use-package doom-themes
+    :ensure t
+    :custom
+    (doom-themes-enable-bold t)
+    (doom-themes-enable-italic t)
+    :config
+    (load-theme 'doom-sourcerer t)
+    (doom-themes-visual-bell-config)
+    (doom-themes-org-config))

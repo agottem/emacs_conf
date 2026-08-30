@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t; -*-
+
 (defun editing-region-whole-line-beginning ()
     (save-excursion (goto-char (region-beginning)) (line-beginning-position)))
 

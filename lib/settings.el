@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t; -*-
+
 (setq-default inhibit-splash-screen             1)
 (setq-default visible-bell                      1)
 (setq-default inhibit-eol-conversion            nil)
@@ -49,7 +51,6 @@
 (which-key-mode       1)
 
 (global-highlight-parentheses-mode)
-(global-tree-sitter-mode)
 (global-diff-hl-mode)
 (global-corfu-mode)
 
@@ -61,12 +62,10 @@
     (set-buffer-file-coding-system 'utf-8-unix nil 1)
     (styles-c-mode)
 
-    (setq c-syntactic-indentation 1)
-    (setq c-basic-offset          4)
-    (setq tab-width               4)
-    (setq indent-tabs-mode        nil)
-    (setq c-tab-always-indent     1)
-    (setq require-final-newline   'visit-save)
+    (setq tab-width             4)
+    (setq indent-tabs-mode      nil)
+    (setq tab-always-indent     t)
+    (setq require-final-newline 'visit-save)
 
     (when-let* ((project (project-current))
                 (root    (project-root project)))
@@ -119,12 +118,10 @@
     (set-buffer-file-coding-system 'utf-8-unix nil 1)
     (styles-c-mode)
 
-    (setq c-syntactic-indentation 1)
-    (setq c-basic-offset          4)
-    (setq tab-width               4)
-    (setq indent-tabs-mode        nil)
-    (setq c-tab-always-indent     1)
-    (setq require-final-newline   'visit-save)
+    (setq tab-width             4)
+    (setq indent-tabs-mode      nil)
+    (setq tab-always-indent     t)
+    (setq require-final-newline 'visit-save)
 
     (add-hook 'before-save-hook 'sanitize-standardize-source-file nil 'local))
 
@@ -196,15 +193,14 @@
     (setq indent-tabs-mode t)
     (setq tab-width        4))
 
-
-(add-hook 'c-mode-hook              'settings-c-mode-config)
-(add-hook 'python-mode-hook         'settings-python-mode-config)
+(add-hook 'c-ts-mode-hook           'settings-c-mode-config)
+(add-hook 'python-ts-mode-hook      'settings-python-mode-config)
 (add-hook 'makefile-gmake-mode-hook 'settings-gmake-mode-config)
 (add-hook 'sh-mode-hook             'settings-sh-mode-config)
 (add-hook 'r-mode-hook              'settings-r-mode-config)
-(add-hook 'js-mode-hook             'settings-js-mode-config)
-(add-hook 'html-mode-hook           'settings-html-mode-config)
-(add-hook 'css-mode-hook            'settings-css-mode-config)
+(add-hook 'js-ts-mode-hook          'settings-js-mode-config)
+(add-hook 'html-ts-mode-hook        'settings-html-mode-config)
+(add-hook 'css-ts-mode-hook         'settings-css-mode-config)
 (add-hook 'xml-mode-hook            'settings-xml-mode-config)
 (add-hook 'latex-mode-hook          'settings-latex-mode-config)
 (add-hook 'emacs-lisp-mode-hook     'settings-emacs-lisp-mode-config)
@@ -212,48 +208,49 @@
 (add-hook 'markdown-mode-hook       'settings-markdown-mode-config)
 (add-hook 'text-mode-hook           'settings-text-mode-config)
 
-(add-hook 'tree-sitter-after-on-hook 'tree-sitter-hl-mode)
-(add-hook 'shell-mode-hook           'compilation-shell-minor-mode)
+(add-hook 'shell-mode-hook          'compilation-shell-minor-mode)
 
 
-(setq auto-mode-alist (append '(
-                                   ("\\.c$"     . c-mode)
-                                   ("\\.cpp$"   . c-mode)
-                                   ("\\.cc$"    . c-mode)
-                                   ("\\.cxx$"   . c-mode)
-                                   ("\\.h$"     . c-mode)
-                                   ("\\.hpp$"   . c-mode)
+(setq auto-mode-alist (append '(("\\.c$"     . c-mode)
+                                ("\\.cpp$"   . c-mode)
+                                ("\\.cc$"    . c-mode)
+                                ("\\.cxx$"   . c-mode)
+                                ("\\.h$"     . c-mode)
+                                ("\\.hpp$"   . c-mode)
 
-                                   ("\\.py$"    . python-mode)
+                                ("\\.py$"    . python-mode)
 
-                                   ("\\.mk$"    . makefile-gmake-mode)
-                                   ("Makefile$" . makefile-gmake-mode)
-                                   ("makefile$" . makefile-gmake-mode)
+                                ("\\.mk$"    . makefile-gmake-mode)
+                                ("Makefile$" . makefile-gmake-mode)
+                                ("makefile$" . makefile-gmake-mode)
 
-                                   ("\\.sh$"    . sh-mode)
+                                ("\\.sh$"    . sh-mode)
 
-                                   ("\\.R$"     . r-mode)
+                                ("\\.R$"     . r-mode)
 
-                                   ("\\.patch$" . diff-mode)
+                                ("\\.patch$" . diff-mode)
 
-                                   ("\\.csv$"   . csv-mode)
+                                ("\\.csv$"   . csv-mode)
 
-                                   ("\\.js$"    . js-mode)
+                                ("\\.conf$"  . js-mode)
+                                ("\\.cfg$"   . js-mode)
 
-                                   ("\\.html$"  . html-mode)
-                                   ("\\.htm$"   . html-mode)
-                                   ("\\.css$"   . css-mode)
-                                   ("\\.xml$"   . xml-mode)
+                                ("\\.js$"    . js-mode)
 
-                                   ("\\.tex$"   . latex-mode)
+                                ("\\.html$"  . html-mode)
+                                ("\\.htm$"   . html-mode)
+                                ("\\.css$"   . css-mode)
+                                ("\\.xml$"   . xml-mode)
 
-                                   ("\\.el$"    . emacs-lisp-mode)
-                                   ("\\.emacs$" . emacs-lisp-mode)
+                                ("\\.tex$"   . latex-mode)
 
-                                   ("\\.org$"   . org-mode)
+                                ("\\.el$"    . emacs-lisp-mode)
+                                ("\\.emacs$" . emacs-lisp-mode)
 
-                                   ("\\.gpt$"   . markdown-mode)
-                                   ("\\.md$"    . markdown-mode)
+                                ("\\.org$"   . org-mode)
 
-                                   ("\\.stab$"  . text-mode)
-                                   ("\\.txt$"   . text-mode))))
+                                ("\\.gpt$"   . markdown-mode)
+                                ("\\.md$"    . markdown-mode)
+
+                                ("\\.stab$"  . text-mode)
+                                ("\\.txt$"   . text-mode))))

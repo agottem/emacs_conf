@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t; -*-
+
 (defun sanitize-strip-cr ()
     (interactive)
     (while (re-search-forward "\r" nil t)

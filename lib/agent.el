@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t; -*-
+
 (defvar agent-artifact-root (getenv "RIG_ARTIFACT_ROOT"))
 
 (defun agent-make-transcript-directory (subdir)
@@ -6,7 +8,7 @@
         (expand-file-name subdir (file-name-concat user-emacs-tmp-directory "agent-shell" sanitized))))
 
 (defun agent-make-name ()
-    (when-let ((proj-dir (project-current)))
+    (when-let* ((proj-dir (project-current)))
         (replace-regexp-in-string "[^[:alnum:]]+" "-"
             (file-name-nondirectory
                 (directory-file-name

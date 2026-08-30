@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t; -*-
+
 (defun projects-auto-discover (root-path)
     "Discover projects one level under dev_home"
     (dolist (entry (directory-files root-path t "^[^.]" t))

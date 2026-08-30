@@ -1,8 +1,10 @@
+;; -*- lexical-binding: t; -*-
+
 (defvar user-emacs-tmp-directory (file-name-concat user-emacs-directory "tmp/"))
 (make-directory user-emacs-tmp-directory t)
 
 (add-to-list 'load-path              (file-name-concat user-emacs-directory "lib"))
-(add-to-list 'custom-theme-load-path (file-name-concat user-emacs-directory "themes"))
+;(add-to-list 'custom-theme-load-path (file-name-concat user-emacs-directory "themes"))
 
 (load-library "packages")
 (load-library "editing")
