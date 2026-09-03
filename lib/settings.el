@@ -43,7 +43,7 @@
 
 (setq eldoc-display-functions '(eldoc-display-in-buffer))
 
-(setq Man-notify-method, 'pushy)
+(setq Man-notify-method 'pushy)
 
 (show-paren-mode      1)
 (menu-bar-mode        0)
