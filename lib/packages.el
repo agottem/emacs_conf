@@ -50,7 +50,7 @@
     (setq gptel-model 'gpt-5.4)
     (setq gptel-backend (gptel-make-openai "OpenAI"
                             :key (getenv "OPENAI_API_KEY")
-                            :models '("gpt-5.5")))
+                            :models '("gpt-5.6-sol")))
     (setq gptel-default-mode 'org-mode))
 
 (use-package shell-maker
